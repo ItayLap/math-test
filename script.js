@@ -11,66 +11,50 @@ let correct = 0;
 let mistake = 0;
 let accuracy = 0;
 
-add.addEventListener('click', function (e) {
+const operations = {
+    add: (num1, num2) => num1 + num2,
+    subtract: (num1, num2) => num1 - num2,
+    multiply: (num1, num2) => num1 * num2,
+    divide: (num1, num2) => Math.round(num1 / num2)
+};
+
+function handleOperation(operation) {
     let num1 = getRandomInt(min, max);
     let num2 = getRandomInt(min, max);
-    let correctAns = num1 + num2;
-    let userAns = prompt(num1 + '+' + num2 + '=', '');
+    let correctAns = operations[operation](num1, num2);
+    let operator = operation === 'add' ? '+' : operation === 'subtract' ? '-' : operation === 'multiply' ? 'x' : ':';
+    if (operation === 'divide') alert("round your answer");
+    let userAns = prompt(${num1} ${operator} ${num2} =, '');
     checkAns(correctAns, userAns);
+}
+
+add.addEventListener('click', () => handleOperation('add'));
+subtract.addEventListener('click', () => handleOperation('subtract'));
+multiply.addEventListener('click', () => handleOperation('multiply'));
+divide.addEventListener('click', () => handleOperation('divide'));
+
+checkStat.addEventListener('click', () => {
+    accuracy = correct / (mistake + correct);
+    alert(mistakes = ${mistake}\ncorrect answers = ${correct}\naccuracy = ${accuracy});
 });
 
-subtract.addEventListener('click', function (e) {
-    let num1 = getRandomInt(min, max);
-    let num2 = getRandomInt(min, max);
-    let correctAns = num1 - num2;
-    let userAns = prompt(num1 + '-' + num2 + '=', '');
-    checkAns(correctAns, userAns);
-});
-
-multiply.addEventListener('click', function (e) {
-    let num1 = getRandomInt(min, max);
-    let num2 = getRandomInt(min, max);
-    let correctAns = num1 * num2;
-    let userAns = prompt(num1 + 'x' + num2 + '=', '');
-    checkAns(correctAns, userAns);
-});
-
-divide.addEventListener('click', function (e) {
-    let num1 = getRandomInt(min, max);
-    let num2 = getRandomInt(min, max);
-    let correctAns = num1 / num2;
-    correctAns = Math.round(correctAns);
-    alert("round your answer")
-    let userAns = prompt(num1 + ':' + num2 + '=', '');
-    checkAns(correctAns, userAns);
-});
-
-checkStat.addEventListener('click', function (e) {
-    accuracy = correct / (mistake + correct)
-
-    alert('mistekes = ' + mistake + '\n correct answers = ' + correct + '\n accuracy ' + accuracy);
-
-});
-
-reset.addEventListener('click', function (e) {
+reset.addEventListener('click', () => {
     mistake = 0;
     correct = 0;
     accuracy = 0;
 });
 
-select.addEventListener('change', function (e) {
+select.addEventListener('change', () => {
     let value = select.value;
     switch (value) {
         case 'easy':
             min = 1;
             max = 9;
             break;
-
         case 'medium':
             min = 10;
             max = 99;
             break;
-
         case 'hard':
             min = 100;
             max = 999;
@@ -81,14 +65,13 @@ select.addEventListener('change', function (e) {
 function checkAns(correctAns, userAns) {
     if (correctAns == userAns) {
         alert('correct');
-        correct = correct + 1;
+        correct++;
     } else {
-        alert(userAns + ' is wrong the correct answer is ' + correctAns);
-        mistake = mistake + 1;
+        alert(${userAns} is wrong, the correct answer is ${correctAns});
+        mistake++;
     }
-
 }
-function getRandomInt(min, max) {
 
+function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
